@@ -12,6 +12,7 @@ import Dashboard from '../Pages/Dashboard'
 import Profile from '../Pages/Profile'
 import OTPVerification from '../Pages/OTPVerification'
 import ChangePassword from '../Pages/ChangePass'
+import Courses from '../Pages/Courses'
 import { Link, useLocation } from 'react-router-dom'
 import LocomotiveScroll from 'locomotive-scroll';
 import Thanks from '../Pages/Thanks'
@@ -38,6 +39,7 @@ const App = () => {
         <Route path='/Profile' element={<Profile/>} />
         <Route path='/Thanks' element={<Thanks/>} />
         <Route path='/Change_Password' element={<ChangePassword/>} />
+        <Route path='/Courses' element={<Courses/>} />
         {/* OTP routes (support both old/new URLs) */}
         
         <Route

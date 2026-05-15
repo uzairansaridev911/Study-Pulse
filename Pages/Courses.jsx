@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaBook, FaChartBar, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaBook, FaChartBar, FaCog, FaSignOutAlt, FaThLarge, FaLaptop, FaChevronDown, FaTerminal, FaCode } from 'react-icons/fa';
 import { useClerk, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -11,13 +11,14 @@ import loader from '../Components/Loader';
 import { triggerExit } from './transition';
 
 
-const Dashboard = () => {
+const Courses = () => {
   const {signOut} = useClerk();
   const navigate = useNavigate();
   const { user, isLoaded: clerkLoaded } = useUser(); // Clerk se logged-in user ki ID lene ke liye
   const { userData, setUserData } = useContext(UserContext);
   
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedRange, setSelectedRange] = useState('7days');
   const [loading, setLoading] = useState(true); // Loading state zaroori hai
@@ -144,19 +145,18 @@ useEffect(() => {
       return <loader />;
     }
 
-
-    const goToCourses = async () => {
-
-     await triggerExit();
-
-     navigate('/Courses');
-
-    };
+  const goToDashboard = async () => {
+  
+       await triggerExit();
+  
+       navigate('/Dashboard');
+  
+      };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`bg-linear-to-b from-green-500 to-green-800 text-white w-64 fixed h-full transition-transform duration-300 z-30 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 overflow-y-auto`}>
+      <div className={`bg-linear-to-b from-violet-700 to-violet-950 text-white w-64 fixed h-full transition-transform duration-300 z-30 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 overflow-y-auto`}>
         <div className="p-4 lg:p-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-xl lg:text-2xl font-bold">Study Pulse</h2>
@@ -167,30 +167,57 @@ useEffect(() => {
             </button>
           </div>
           <nav className="space-y-2">
-            <a href="#" className="flex items-center space-x-3 bg-green-900 bg-opacity-50 p-3 rounded-lg transition-all duration-200 hover:bg-opacity-70">
-              <FaHome className='text-[20px]'/>
-              <span className="font-medium">Overview</span>
+    
+            <a onClick={goToDashboard} className="flex hover:bg-violet-950 hover:cursor-pointer items-center space-x-3  bg-opacity-50 p-3 rounded-lg transition-all duration-200 hover:bg-opacity-70">
+              <FaThLarge className='text-[20px]'/>
+              <span className="font-medium">Dashboard</span>
             </a>
-            <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaUser className='text-[20px]'/>
-              <span className="font-medium">Students</span>
-            </a>
-            <a onClick={goToCourses} className="flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
+            <a className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 bg-violet-950 hover:bg-opacity-50">
               <FaBook className='text-[20px]'/>
               <span className="font-medium">Courses</span>
             </a>
-            <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaChartBar className='text-[20px]'/>
-              <span className="font-medium">Analytics</span>
+             <div className='bg-indigo-950 w-full mt-5 rounded-lg space-y-1'>
+             <a className="hover:cursor-pointer flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 bg-violet-950 hover:bg-opacity-50">
+              <FaBook className='text-[20px]'/>
+              <span className="font-medium">All Courses</span>
             </a>
+            <div className="flex flex-col">
+      <a 
+        onClick={() => setIsCoursesOpen(!isCoursesOpen)} 
+        className={`flex items-center justify-between space-x-3 p-3 rounded-lg transition-all duration-200 hover:cursor-pointer 
+          ${isCoursesOpen ? 'bg-violet-950' : 'hover:bg-violet-950 hover:bg-opacity-50'}`}
+      >
+        <div className="flex items-center space-x-3">
+          <FaLaptop className='text-[20px]'/>
+          <span className="font-medium">IT Courses</span>
+        </div>
+        <FaChevronDown className={`ml-13 text-xs transition-transform duration-300 ${isCoursesOpen ? 'rotate-180' : ''}`} />
+        {/* Chota sa arrow jo toggle hone par ghumega */}
+      </a>
+
+      {/* Actual Dropdown Content */}
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out bg-indigo-950 rounded-lg mt-1 
+        ${isCoursesOpen ? 'max-h-40 opacity-100 py-1' : 'max-h-0 opacity-0'}`}
+      >
+        <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-violet-950 hover:bg-opacity-50">
+          <FaTerminal className='text-[18px] text-green-400'/>
+          <span className="text-sm">Web Development</span>
+        </a>
+        <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-violet-950 hover:bg-opacity-50">
+          <FaCode className='text-[18px] text-green-400'/>
+          <span className="text-sm">App Development</span>
+        </a>
+      </div>
+    </div>
             <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
               <FaCog className='text-[20px]'/>
-              <span className="font-medium">Settings</span>
+              <span className="font-medium">Language Courses</span>
             </a>
             <button onClick={() => setShowLogoutModal(true)} className="w-full flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50 text-left">
               <FaSignOutAlt className='text-[20px]'/>
               <span className="font-medium">Logout</span>
             </button>
+            </div>
           </nav>
         </div>
       </div>
@@ -212,7 +239,7 @@ useEffect(() => {
               </button>
               <div className="min-w-0">
                 <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">Welcome, {userData?.firstName + ' ' + userData?.lastName || 'Guest'}</h1>
-                <p className="text-xs sm:text-sm text-gray-500 hidden sm:block">Here is your activity today</p>
+                <p className="text-xs sm:text-sm text-gray-500 hidden sm:block">Study-Pulse limited Edition Courses </p>
               </div>
             </div>
             
@@ -246,109 +273,6 @@ useEffect(() => {
             </div>
           </div>
         </header>
-
-        {/* Dashboard Content */}
-        <main className="p-3 sm:p-4 lg:p-6">
-          <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-4 lg:mb-6">
-            <div className="stat-card bg-linear-to-br from-blue-500 to-blue-600 rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-30 rounded-lg flex items-center justify-center text-white text-xl font-bold"><FaUser /></div>
-                <span className="text-xs bg-white text-blue-600 font-bold bg-opacity-20 px-2 py-0.5 rounded-full">+12%</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">5,420</h3>
-              <p className="text-blue-100 text-xs sm:text-sm">Total Students</p>
-            </div>
-
-            <div className="stat-card bg-linear-to-br from-emerald-500 to-emerald-600 rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-30 rounded-lg flex items-center justify-center text-white text-xl font-bold"><FaBook /></div>
-                <span className="text-xs bg-white text-emerald-600 font-bold bg-opacity-20 px-2 py-0.5 rounded-full">+8%</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">142</h3>
-              <p className="text-emerald-100 text-xs sm:text-sm">Active Courses</p>
-            </div>
-
-            <div className="stat-card bg-linear-to-br from-purple-500 to-purple-600 rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-30 rounded-lg flex items-center justify-center text-white text-xl font-bold"><FaChartBar /></div>
-                <span className="text-xs bg-white text-purple-600 font-bold bg-opacity-20 px-2 py-0.5 rounded-full">+23%</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">$84K</h3>
-              <p className="text-purple-100 text-xs sm:text-sm">Revenue</p>
-            </div>
-
-            <div className="stat-card bg-linear-to-br from-orange-500 to-orange-600 rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-30 rounded-lg flex items-center justify-center text-white text-xl font-bold"><FaCog /></div>
-                <span className="text-xs bg-white text-orange-600 font-bold bg-opacity-20 px-2 py-0.5 rounded-full">94%</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">2,845</h3>
-              <p className="text-orange-100 text-xs sm:text-sm">Completed</p>
-            </div>
-          </div>
-
-          <div ref={chartsRef} className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-4 lg:mb-6">
-            <div className="lg:col-span-2 bg-white rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
-                <div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">My Activity</h2>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">Dashboard visits this week</p>
-                </div>
-                <select value={selectedRange} onChange={(e) => setSelectedRange(e.target.value)} className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
-                  <option value="7days">Last 7 days</option>
-                  <option value="30days">Last 30 days</option>
-                </select>
-              </div>
-              <div className="h-48 sm:h-56 lg:h-64 flex items-end justify-between gap-1 sm:gap-2">
-                {activityData.map((data, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center group">
-                    <div className="relative w-full">
-                      <div className="w-full bg-linear-to-t from-blue-500 to-blue-400 rounded-t-lg transition-all duration-500 hover:from-blue-600 hover:to-blue-500 cursor-pointer" style={{ height: `${(data.visits / maxVisits) * 100}%`, minHeight: '20px' }}>
-                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                          {data.visits} visits
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-xs text-gray-500 mt-2">{data.day}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">Categories</h2>
-              <div className="flex items-center justify-center mb-4 sm:mb-6">
-                <div className="relative w-36 h-36 sm:w-40 sm:h-40 lg:w-48 lg:h-48">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle cx="50%" cy="50%" r="35%" fill="none" stroke="#3b82f6" strokeWidth="25%" strokeDasharray="251 251" />
-                    <circle cx="50%" cy="50%" r="35%" fill="none" stroke="#10b981" strokeWidth="25%" strokeDasharray="157 251" strokeDashoffset="-251" />
-                    <circle cx="50%" cy="50%" r="35%" fill="none" stroke="#8b5cf6" strokeWidth="25%" strokeDasharray="94 251" strokeDashoffset="-408" />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center text-center">
-                    <div>
-                      <p className="text-xl sm:text-2xl font-bold text-gray-800">142</p>
-                      <p className="text-xs text-gray-500">Courses</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center justify-between text-xs sm:text-sm">
-                  <div className="flex items-center space-x-2"><div className="w-3 h-3 bg-blue-500 rounded-full"></div><span className="text-gray-600">Programming</span></div>
-                  <span className="font-semibold text-gray-800">50%</span>
-                </div>
-                <div className="flex items-center justify-between text-xs sm:text-sm">
-                  <div className="flex items-center space-x-2"><div className="w-3 h-3 bg-emerald-500 rounded-full"></div><span className="text-gray-600">Design</span></div>
-                  <span className="font-semibold text-gray-800">31%</span>
-                </div>
-                <div className="flex items-center justify-between text-xs sm:text-sm">
-                  <div className="flex items-center space-x-2"><div className="w-3 h-3 bg-purple-500 rounded-full"></div><span className="text-gray-600">Business</span></div>
-                  <span className="font-semibold text-gray-800">19%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
       </div>
 
       {/* Logout Modal */}
@@ -374,4 +298,4 @@ useEffect(() => {
   );
 };
 
-export default Dashboard;
+export default Courses;
