@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  
+}
+/* Sabhi browsers ke liye scrollbar hide karein */
+html, body {
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  
+  /* Firefox */
+  scrollbar-width: none;
+}
+
+/* Chrome, Safari and Opera */
+html::-webkit-scrollbar {
+  display: none;
+}
