@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaBook, FaChartBar, FaCog, FaSignOutAlt, FaThLarge, FaLaptop, FaChevronDown, FaTerminal, FaCode, FaPaintBrush } from 'react-icons/fa';
+import { FaHome, FaUser, FaBook, FaChartBar, FaCog, FaSignOutAlt, FaThLarge, FaLaptop, FaChevronDown, FaTerminal, FaCode, FaPaintBrush, FaRegFrown } from 'react-icons/fa';
 import { useClerk, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
 import { db } from '../src/Firebase'; // Check karlein path sahi ho
 import { doc, getDoc } from 'firebase/firestore';
-import loader from '../Components/Loader';
+import LoaderLite from '../Components/LoaderLite';
 import { triggerExit } from './transition';
-
+import React from '../images/React.webp'
 
 const Courses = () => {
   const { signOut } = useClerk();
@@ -20,25 +20,46 @@ const Courses = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [selectedRange, setSelectedRange] = useState('7days');
   const [loading, setLoading] = useState(true); // Loading state zaroori hai
 
-  const [activityData] = useState([
-    { day: 'Mon', visits: 45, hours: 3.5 },
-    { day: 'Tue', visits: 52, hours: 4.2 },
-    { day: 'Wed', visits: 38, hours: 2.8 },
-    { day: 'Thu', visits: 65, hours: 5.1 },
-    { day: 'Fri', visits: 58, hours: 4.5 },
-    { day: 'Sat', visits: 72, hours: 6.2 },
-    { day: 'Sun', visits: 48, hours: 3.8 }
-  ]);
-
-  const maxVisits = Math.max(...activityData.map(d => d.visits));
 
   const headerRef = useRef(null);
-  const statsRef = useRef(null);
-  const chartsRef = useRef(null);
-  const tableRef = useRef(null);
+
+
+
+
+  const [viewLoading, setViewLoading] = useState(false);
+  const [activeView, setActiveView] = useState('overview');
+
+  const loadAllCourses = () => {
+
+    setViewLoading(true);
+
+    setTimeout(() => {
+
+      setActiveView('AllCourses')
+      setViewLoading(false)
+
+    }, 2000);
+
+  }
+
+  const loadOverview = () => {
+    setViewLoading(true);
+
+    setTimeout(() => {
+
+      setActiveView('overview')
+      setViewLoading(false)
+
+    }, 2000);
+
+  }
+
+
+
+
+
 
   const loadUserData = async (userId) => {
     try {
@@ -93,53 +114,7 @@ const Courses = () => {
   };
 
 
-  useEffect(() => {
-    if (loading) return;
 
-    if (headerRef.current) {
-      headerRef.current.style.opacity = '0';
-      headerRef.current.style.transform = 'translateY(-20px)';
-      setTimeout(() => {
-        headerRef.current.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        headerRef.current.style.opacity = '1';
-        headerRef.current.style.transform = 'translateY(0)';
-      }, 100);
-    }
-
-    if (statsRef.current) {
-      const stats = statsRef.current.querySelectorAll('.stat-card');
-      stats.forEach((stat, index) => {
-        stat.style.opacity = '0';
-        stat.style.transform = 'translateY(30px)';
-        setTimeout(() => {
-          stat.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-          stat.style.opacity = '1';
-          stat.style.transform = 'translateY(0)';
-        }, 200 + index * 100);
-      });
-    }
-
-
-    if (chartsRef.current) {
-      chartsRef.current.style.opacity = '0';
-      chartsRef.current.style.transform = 'translateY(30px)';
-      setTimeout(() => {
-        chartsRef.current.style.transition = 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
-        chartsRef.current.style.opacity = '1';
-        chartsRef.current.style.transform = 'translateY(0)';
-      }, 600);
-    }
-
-    if (tableRef.current) {
-      tableRef.current.style.opacity = '0';
-      tableRef.current.style.transform = 'translateY(30px)';
-      setTimeout(() => {
-        tableRef.current.style.transition = 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
-        tableRef.current.style.opacity = '1';
-        tableRef.current.style.transform = 'translateY(0)';
-      }, 800);
-    }
-  }, [loading]);
 
   if (loading) {
     return <loader />;
@@ -152,6 +127,23 @@ const Courses = () => {
     navigate('/Dashboard');
 
   };
+
+  const courses = [
+  {
+    id: 1,
+    title: 'React — Complete Developer Guide',
+    category: 'Frontend',
+    description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+    level: 'Beginner',
+    logoBg: 'bg-[#000000]',
+    logoLabel: '⚛ React',
+    logoColor: 'text-[#61dafb]',
+    tagStyle: 'bg-cyan-50 text-cyan-700',
+    levelColor: 'bg-cyan-400',
+    btnStyle: 'border-cyan-300 text-cyan-700',
+  },
+  // ... add more
+];
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -172,13 +164,19 @@ const Courses = () => {
               <FaThLarge className='text-[20px]' />
               <span className="font-medium">Dashboard</span>
             </a>
-            <a className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 bg-violet-950 hover:bg-opacity-50">
-              <FaChartBar className='text-[20px]' />
+            <a onClick={() => {
+              loadOverview();
+              setSidebarOpen(false);
+            }} className="hover:cursor-pointer flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 bg-violet-950 hover:bg-opacity-50">
+              <FaHome className='text-[20px]' />
               <span className="font-medium">Overview</span>
             </a>
             <div className='bg-indigo-950 w-full mt-5 rounded-lg space-y-2'>
-              <a className="hover:cursor-pointer flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-violet-950">
-                <FaBook className='text-[20px]' />
+              <a onClick={() => {
+                loadAllCourses();
+                setSidebarOpen(false);
+              }} className="hover:cursor-pointer flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-violet-950">
+                <FaChartBar className='text-[20px]' />
                 <span className="font-medium">All Courses</span>
               </a>
               <div className="flex flex-col">
@@ -277,7 +275,76 @@ const Courses = () => {
             </div>
           </div>
         </header>
+
+
+        {/* {actual content} */}
+
+
+        {viewLoading ? (
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)] w-full">
+            <div className="transform translate-y-[-20px]"> {/* Thoda sa niche push karne ke liye balance tweak */}
+              <LoaderLite />
+            </div>
+          </div>
+        ) : (
+
+          <>
+
+            {activeView === 'overview' && (
+
+              <div className="flex flex-col flex-1 items-center justify-center min-h-[80vh] p-4">
+                <FaRegFrown className="text-gray-400 text-6xl sm:text-8xl animate-bounce-slow" />
+                <p className="text-gray-500 mt-4 text-xl font-medium text-center">You haven't enrolled in any course yet.</p>
+              </div>
+
+            )}
+
+
+
+            {activeView === 'AllCourses' && (
+
+             <div className="p-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {courses.map((course) => (
+        <div key={course.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:-translate-y-1 transition-transform duration-200 flex flex-col">
+          
+          {/* Logo area */}
+          <div className={`h-20 flex items-center justify-center ${course.logoBg}`}>
+            <span className={`text-sm font-mono font-semibold ${course.logoColor}`}>
+              {course.logoLabel}
+            </span>
+          </div>
+
+          {/* Body */}
+          <div className="p-4 flex flex-col flex-1">
+            <span className={`text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md w-fit mb-2 ${course.tagStyle}`}>
+              {course.category}
+            </span>
+            <h3 className="text-sm font-semibold text-gray-800 mb-1">{course.title}</h3>
+            <p className="text-xs text-gray-500 leading-relaxed flex-1">{course.description}</p>
+
+            <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
+              <span className="text-xs text-gray-400 flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${course.levelColor}`}></span>
+                {course.level}
+              </span>
+              <button className={`text-xs font-medium px-3 py-1.5 rounded-lg border ${course.btnStyle}`}>
+                Enroll
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+            )}
+
+          </>
+        )}
       </div>
+
+
 
       {/* Logout Modal */}
       {showLogoutModal && (
