@@ -22,7 +22,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.notification?.body,
     icon: payload.notification?.image || '/logo192.png',
-    sound: '/notification.mp3' // Case correctly matched to lowercase
+    sound: '/Notification.mp3' // Matched case to actual file name
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
 });

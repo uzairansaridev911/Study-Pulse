@@ -99,7 +99,7 @@ const App = () => {
         if (AudioContext) {
           const audioCtx = new AudioContext();
           
-          fetch('/notification.mp3')
+          fetch('/Notification.mp3')
             .then(response => response.arrayBuffer())
             .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
             .then(audioBuffer => {
@@ -111,7 +111,7 @@ const App = () => {
             })
             .catch(ae => {
               console.log("Regular fetch play failed, falling back to standard element...", ae);
-              const fallbackAudio = new Audio('/notification.mp3');
+              const fallbackAudio = new Audio('/Notification.mp3');
               fallbackAudio.play().catch(err => console.log("Standard audio blocked:", err));
             });
         }
