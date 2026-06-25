@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
-import gsap from 'gsap';
 import { useUser, useClerk } from '@clerk/clerk-react';
+import gsap from 'gsap';  
 import { FaHome, FaUser, FaCog, FaEnvelope, FaSignOutAlt, FaBars, FaUserFriends } from 'react-icons/fa';
 
 // ─── Sidebar ────────────────────────────────────────────────────────────────

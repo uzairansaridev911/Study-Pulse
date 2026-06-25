@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore"; // Database ke liye zaroori hai
+import { getMessaging } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBYkuvXq7P5R0FZSLUexhIbRYS50k_RqW4",
+  apiKey: "AIzaSyBYkuvXq7P5R0FZSLUexhIbRYS5Ok_RqW4",
   authDomain: "studypulse-db.firebaseapp.com",
   projectId: "studypulse-db",
   storageBucket: "studypulse-db.firebasestorage.app",
@@ -15,3 +16,4 @@ const app = initializeApp(firebaseConfig);
 
 // Database (Firestore) ko export karein taake Profile.jsx mein use kar sakein
 export const db = getFirestore(app);
+export const messaging = getMessaging(app);

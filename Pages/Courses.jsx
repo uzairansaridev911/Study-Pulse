@@ -9,7 +9,13 @@ import { db } from '../src/Firebase'; // Check karlein path sahi ho
 import { doc, getDoc } from 'firebase/firestore';
 import LoaderLite from '../Components/LoaderLite';
 import { triggerExit } from './transition';
-import React from '../images/React.webp'
+import Reactimg from '../Images/React.webp';
+import HTMLimg from '../Images/HTML.webp';
+import Tailwindimg from '../Images/Tailwind.webp';
+import JSimg from '../Images/JS.webp';
+import CSSimg from '../Images/CSS.webp';
+import GSAPimg from '../Images/GSAP.webp';
+import FramerMotionimg from '../Images/FramerMotion.webp';
 
 const Courses = () => {
   const { signOut } = useClerk();
@@ -129,21 +135,98 @@ const Courses = () => {
   };
 
   const courses = [
-  {
-    id: 1,
-    title: 'React — Complete Developer Guide',
-    category: 'Frontend',
-    description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
-    level: 'Beginner',
-    logoBg: 'bg-[#000000]',
-    logoLabel: '⚛ React',
-    logoColor: 'text-[#61dafb]',
-    tagStyle: 'bg-cyan-50 text-cyan-700',
-    levelColor: 'bg-cyan-400',
-    btnStyle: 'border-cyan-300 text-cyan-700',
-  },
-  // ... add more
-];
+    {
+      id: 1,
+      title: 'React — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Advanced',
+      logoBg: 'bg-gradient-to-br from-indigo-900 to-black',
+      logoLabel: Reactimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-red-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 2,
+      title: 'HTML — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Beginner',
+      logoBg: 'bg-gradient-to-br from-orange-900 to-black',
+      logoLabel: HTMLimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-lime-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 3,
+      title: 'Tailwind CSS — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Intermediate',
+      logoBg: 'bg-gradient-to-br from-cyan-600 to-black',
+      logoLabel: Tailwindimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-yellow-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 4,
+      title: 'JavaScript — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Intermediate',
+      logoBg: 'bg-gradient-to-br from-yellow-400 to-black',
+      logoLabel:JSimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-yellow-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 5,
+      title: 'CSS — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Beginner',
+      logoBg: 'bg-gradient-to-br from-sky-700 to-black',
+      logoLabel: CSSimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-lime-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 1,
+      title: 'GSAP — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Advanced',
+      logoBg: 'bg-gradient-to-br from-lime-800 to-black',
+      logoLabel: GSAPimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-red-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+     {
+      id: 1,
+      title: 'Framer Motion — Complete Developer Guide',
+      category: 'Frontend',
+      description: 'Build modern UIs with components, hooks, and state management. Go from zero to production-ready.',
+      level: 'Advanced',
+      logoBg: 'bg-gradient-to-br from-fuchsia-800 to-black',
+      logoLabel: FramerMotionimg,
+      logoColor: 'text-[#61dafb]',
+      tagStyle: 'bg-cyan-50 text-cyan-700',
+      levelColor: 'bg-red-500',
+      btnStyle: 'border-cyan-300 text-cyan-700',
+    },
+  ];
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -303,69 +386,77 @@ const Courses = () => {
 
             {activeView === 'AllCourses' && (
 
-             <div className="p-6">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {courses.map((course) => (
-        <div key={course.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:-translate-y-1 transition-transform duration-200 flex flex-col">
-          
-          {/* Logo area */}
-          <div className={`h-20 flex items-center justify-center ${course.logoBg}`}>
-            <span className={`text-sm font-mono font-semibold ${course.logoColor}`}>
-              {course.logoLabel}
-            </span>
-          </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {courses.map((course) => (
+                    <div key={course.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:-translate-y-1 transition-transform duration-200 flex flex-col">
 
-          {/* Body */}
-          <div className="p-4 flex flex-col flex-1">
-            <span className={`text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md w-fit mb-2 ${course.tagStyle}`}>
-              {course.category}
-            </span>
-            <h3 className="text-sm font-semibold text-gray-800 mb-1">{course.title}</h3>
-            <p className="text-xs text-gray-500 leading-relaxed flex-1">{course.description}</p>
+                      {/* Logo area */}
+                      <div className={`h-20 flex items-center justify-center hover:cursor-pointer ${course.logoBg}`}>
+                        <img
+                          src={course.logoLabel}
+                          alt={course.title}
+                          className="h-28 w-28 object-contain mix-blend-screen"
+                        />
+                    </div>
+                    
 
-            <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
-              <span className="text-xs text-gray-400 flex items-center gap-1">
-                <span className={`w-2 h-2 rounded-full ${course.levelColor}`}></span>
-                {course.level}
-              </span>
-              <button className={`text-xs font-medium px-3 py-1.5 rounded-lg border ${course.btnStyle}`}>
-                Enroll
-              </button>
-            </div>
+                      {/* Body */ }
+                    < div className = "p-4 flex flex-col flex-1 hover:cursor-pointer" >
+                        <span className={`text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md w-fit mb-2 ${course.tagStyle}`}>
+                          {course.category}
+                        </span>
+                        <h3 className="text-sm font-semibold text-gray-800 mb-1">{course.title}</h3>
+                        <p className="text-xs text-gray-500 leading-relaxed flex-1">{course.description}</p>
+
+                        <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
+                          <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <span className={`w-2 h-2 rounded-full ${course.levelColor}`}></span>
+                            {course.level}
+                          </span>
+                          <button className={`active:translate-y-1 hover:cursor-pointer hover:shadow-[0_0_10px_2px_rgba(103,232,249,0.5)] transition-all duration-400 text-xs font-medium px-3 py-1.5 rounded-lg border ${course.btnStyle}`}>
+                            Enroll
+                          </button>
+                        </div>
+                      </div>
+
+                      
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  </div>
+      </div>
 
             )}
 
-          </>
-        )}
-      </div>
+    </>
+  )
+}
+      </div >
 
 
 
-      {/* Logout Modal */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)}></div>
-          <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full relative z-10 shadow-2xl">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaSignOutAlt size={24} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Logout?</h3>
-              <p className="text-gray-500 mb-6">Do you really want to logout?</p>
-              <div className="flex space-x-3">
-                <button onClick={() => setShowLogoutModal(false)} className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200">Stay</button>
-                <button onClick={handleLogout} className="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700">Logout</button>
-              </div>
-            </div>
+  {/* Logout Modal */ }
+{
+  showLogoutModal && (
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)}></div>
+      <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full relative z-10 shadow-2xl">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaSignOutAlt size={24} />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Logout?</h3>
+          <p className="text-gray-500 mb-6">Do you really want to logout?</p>
+          <div className="flex space-x-3">
+            <button onClick={() => setShowLogoutModal(false)} className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200">Stay</button>
+            <button onClick={handleLogout} className="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700">Logout</button>
           </div>
         </div>
-      )}
+      </div>
     </div>
+  )
+}
+    </div >
   );
 };
 

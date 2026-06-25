@@ -12,16 +12,16 @@ import { triggerExit } from './transition';
 
 
 const Dashboard = () => {
-  const {signOut} = useClerk();
+  const { signOut } = useClerk();
   const navigate = useNavigate();
   const { user, isLoaded: clerkLoaded } = useUser(); // Clerk se logged-in user ki ID lene ke liye
   const { userData, setUserData } = useContext(UserContext);
-  
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedRange, setSelectedRange] = useState('7days');
   const [loading, setLoading] = useState(true); // Loading state zaroori hai
-  
+
   const [activityData] = useState([
     { day: 'Mon', visits: 45, hours: 3.5 },
     { day: 'Tue', visits: 52, hours: 4.2 },
@@ -31,7 +31,7 @@ const Dashboard = () => {
     { day: 'Sat', visits: 72, hours: 6.2 },
     { day: 'Sun', visits: 48, hours: 3.8 }
   ]);
-  
+
   const maxVisits = Math.max(...activityData.map(d => d.visits));
 
   const headerRef = useRef(null);
@@ -40,36 +40,36 @@ const Dashboard = () => {
   const tableRef = useRef(null);
 
   const loadUserData = async (userId) => {
-  try {
-    const docRef = doc(db, "users", userId); 
-    const docSnap = await getDoc(docRef);
+    try {
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      setUserData(docSnap.data()); // Context mein user ka apna data set ho jayega
-    } else {
-      console.log("New User, Data could not be found in Firebase!");
-      setUserData({
+      if (docSnap.exists()) {
+        setUserData(docSnap.data()); // Context mein user ka apna data set ho jayega
+      } else {
+        console.log("New User, Data could not be found in Firebase!");
+        setUserData({
           firstName: 'Guest',
           lastName: '',
           profileImage: null,
-          isGuest: true 
+          isGuest: true
         });
+      }
+    } catch (error) {
+      console.error("Firebase fetch error:", error);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Firebase fetch error:", error);
-  } finally {
-    setLoading(false);
-  }
-  
-};
 
-useEffect(() => {
-  if (clerkLoaded && user) {
-    loadUserData(user.id); // Sirf is user ka data load hoga
-  } else if (clerkLoaded && !user) {
-    setLoading(false)
-  }
-}, [user, clerkLoaded]);
+  };
+
+  useEffect(() => {
+    if (clerkLoaded && user) {
+      loadUserData(user.id); // Sirf is user ka data load hoga
+    } else if (clerkLoaded && !user) {
+      setLoading(false)
+    }
+  }, [user, clerkLoaded]);
 
 
 
@@ -78,8 +78,8 @@ useEffect(() => {
   const handleLogout = async () => {
     try {
       // 1. Properly sign out from Clerk (This kills the session)
-      await signOut(); 
-      
+      await signOut();
+
       // 2. Clear any of your own local data
       localStorage.clear();
       sessionStorage.clear();
@@ -91,7 +91,7 @@ useEffect(() => {
     }
   };
 
-  
+
   useEffect(() => {
     if (loading) return;
 
@@ -104,7 +104,7 @@ useEffect(() => {
         headerRef.current.style.transform = 'translateY(0)';
       }, 100);
     }
-    
+
     if (statsRef.current) {
       const stats = statsRef.current.querySelectorAll('.stat-card');
       stats.forEach((stat, index) => {
@@ -117,8 +117,8 @@ useEffect(() => {
         }, 200 + index * 100);
       });
     }
-    
-    
+
+
     if (chartsRef.current) {
       chartsRef.current.style.opacity = '0';
       chartsRef.current.style.transform = 'translateY(30px)';
@@ -139,19 +139,35 @@ useEffect(() => {
       }, 800);
     }
   }, [loading]);
-  
+
   if (loading) {
-      return <loader />;
-    }
+    return <loader />;
+  }
 
 
-    const goToCourses = async () => {
+  const goToCourses = async () => {
 
-     await triggerExit();
+    await triggerExit();
 
-     navigate('/Courses');
+    navigate('/Courses');
 
-    };
+  };
+
+  const goToSettings = async () => {
+
+    await triggerExit();
+
+    navigate('/Settings')
+
+  }
+
+  const goToPeople = async () => {
+
+    await triggerExit();
+
+    navigate('/People')
+
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -168,27 +184,27 @@ useEffect(() => {
           </div>
           <nav className="space-y-2">
             <a href="#" className="flex items-center space-x-3 bg-green-900 bg-opacity-50 p-3 rounded-lg transition-all duration-200 hover:bg-opacity-70">
-              <FaHome className='text-[20px]'/>
+              <FaHome className='text-[20px]' />
               <span className="font-medium">Overview</span>
             </a>
-            <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaUser className='text-[20px]'/>
-              <span className="font-medium">Students</span>
+            <a onClick={goToPeople} className="flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
+              <FaUser className='text-[20px]' />
+              <span className="font-medium">People</span>
             </a>
             <a onClick={goToCourses} className="flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaBook className='text-[20px]'/>
+              <FaBook className='text-[20px]' />
               <span className="font-medium">Courses</span>
             </a>
             <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaChartBar className='text-[20px]'/>
+              <FaChartBar className='text-[20px]' />
               <span className="font-medium">Analytics</span>
             </a>
-            <a href="#" className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
-              <FaCog className='text-[20px]'/>
+            <a onClick={goToSettings} className="flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50">
+              <FaCog className='text-[20px]' />
               <span className="font-medium">Settings</span>
             </a>
             <button onClick={() => setShowLogoutModal(true)} className="w-full flex items-center hover:cursor-pointer space-x-3 p-3 rounded-lg transition-all duration-200 hover:bg-green-900 hover:bg-opacity-50 text-left">
-              <FaSignOutAlt className='text-[20px]'/>
+              <FaSignOutAlt className='text-[20px]' />
               <span className="font-medium">Logout</span>
             </button>
           </nav>
@@ -215,7 +231,7 @@ useEffect(() => {
                 <p className="text-xs sm:text-sm text-gray-500 hidden sm:block">Here is your activity today</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2 sm:space-x-4 shrink-0">
               <button className="relative p-2 rounded-full hover:bg-gray-100 transition-all duration-200">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,20 +240,20 @@ useEffect(() => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
 
-              
+
               <div onClick={() => navigate('/Profile')} className="flex items-center space-x-2 sm:space-x-3 p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 transition-all duration-200 cursor-pointer">
                 <div className="relative">
-                {userData?.profileImage ? (
-                  <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" src={userData.profileImage} alt="profile"/>
+                  {userData?.profileImage ? (
+                    <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" src={userData.profileImage} alt="profile" />
                   ) : (
-                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                       {(userData?.firstName?.[0] || 'G') + (userData?.lastName?.[0] || 'S')}
-                     </div>
+                    </div>
                   )}
                   <span className="absolute bottom-0 right-0 block w-2.5 h-2.5 sm:w-3 sm:h-3 bg-emerald-500 border-2 border-white rounded-full">
                     <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
                   </span>
-                </div> 
+                </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-semibold text-gray-800 leading-none">{userData?.firstName ? `${userData.firstName} ${userData.lastName || ''}` : 'Guest'}</p>
                   <p className="text-xs text-gray-500 mt-1">User</p>
