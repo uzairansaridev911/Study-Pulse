@@ -3,12 +3,13 @@ import {
   FaUser, FaBell, FaPaintBrush, FaShieldAlt, FaBook,
   FaCreditCard, FaQuestionCircle, FaInfoCircle, FaExclamationTriangle,
   FaSignOutAlt, FaChevronRight, FaChevronDown, FaGoogle, FaGithub,
-  FaExternalLinkAlt, FaDownload, FaCheck, FaTimes, FaThLarge
+  FaExternalLinkAlt, FaDownload, FaCheck, FaTimes, FaThLarge, FaBars
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../src/Firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useUser, useClerk } from '@clerk/clerk-react';
+import book from '../Images/Book.webp';
 
 const Toggle = ({ checked: initialChecked = false }) => {
   const [on, setOn] = React.useState(initialChecked);
@@ -51,10 +52,11 @@ const Badge = ({ label, color }) => {
 };
 
 const Row = ({ icon, title, sub, right, danger }) => (
-  <div style={{
+  <div className="settings-row" style={{
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '14px 20px',
     borderBottom: '1px solid #f3f4f6',
+    flexWrap: 'wrap', gap: 10
   }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
       {icon && (
@@ -106,7 +108,8 @@ const Btn = ({ children, variant = 'outline', onClick, small }) => {
       padding: small ? '5px 10px' : '7px 14px',
       borderRadius: 8, cursor: 'pointer',
       transition: 'opacity 0.15s',
-      fontFamily: 'inherit'
+      fontFamily: 'inherit',
+      whiteSpace: 'nowrap'
     }}>{children}</button>
   );
 };
@@ -123,7 +126,7 @@ const Inp = ({ value, placeholder, type = 'text', style = {} }) => {
         border: '1px solid #d1d5db', borderRadius: 8,
         background: '#f9fafb', color: '#111827',
         outline: 'none', fontFamily: 'inherit',
-        width: '100%', ...style
+        width: '100%', boxSizing: 'border-box', ...style
       }}
     />
   );
@@ -139,21 +142,21 @@ const SectionAccount = () => (
     </div>
 
     <Card label="Profile">
-      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, borderBottom: '1px solid #f3f4f6' }}>
+      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14, borderBottom: '1px solid #f3f4f6', flexWrap: 'wrap' }}>
         <div style={{
           width: 58, height: 58, borderRadius: '50%',
           background: 'linear-gradient(135deg,#16a34a,#15803d)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 22, fontWeight: 700, color: '#fff', flexShrink: 0
         }}>UA</div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 140 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>Uzair Ansari</div>
           <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>uzair@gmail.com</div>
           <Badge label="Pro Member" color="green" />
         </div>
         <Btn>Edit photo</Btn>
       </div>
-      <div style={{ padding: '14px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, borderBottom: '1px solid #f3f4f6' }}>
+      <div className="profile-grid" style={{ padding: '14px 20px', display: 'grid', gap: 12, borderBottom: '1px solid #f3f4f6' }}>
         <div>
           <label style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>First name</label>
           <div style={{ marginTop: 5 }}><Inp value="Uzair" /></div>
@@ -210,7 +213,7 @@ const SectionNotifications = () => (
     </Card>
     <Card label="Quiet hours">
       <Row title="Do not disturb" sub="Pause all notifications during a window" right={<Toggle />} />
-      <div style={{ padding: '12px 20px', display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div style={{ padding: '12px 20px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <span style={{ fontSize: 12, color: '#6b7280' }}>From</span>
         <input type="time" defaultValue="22:00" style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 12, background: '#f9fafb', color: '#111827', fontFamily: 'inherit' }} />
         <span style={{ fontSize: 12, color: '#6b7280' }}>to</span>
@@ -231,7 +234,7 @@ const SectionAppearance = () => {
         <p style={{ fontSize: 13, color: '#6b7280', marginTop: 3 }}>Customize how Study Pulse looks for you</p>
       </div>
       <Card label="Theme">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, padding: '16px 20px' }}>
+        <div className="theme-grid" style={{ display: 'grid', gap: 10, padding: '16px 20px' }}>
           {[['light', '☀️', 'Light'], ['dark', '🌙', 'Dark'], ['system', '💻', 'System']].map(([key, icon, label]) => (
             <div key={key} onClick={() => setTheme(key)} style={{
               border: `2px solid ${theme === key ? '#16a34a' : '#e5e7eb'}`,
@@ -312,7 +315,7 @@ const SectionLearning = () => {
       </div>
       <Card label="Goals">
         <div style={{ padding: '14px 20px', borderBottom: '1px solid #f3f4f6' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 10 }}>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>Daily learning goal</div>
               <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>
@@ -355,9 +358,9 @@ const SectionBilling = () => (
       <p style={{ fontSize: 13, color: '#6b7280', marginTop: 3 }}>Manage your plan and payment methods</p>
     </div>
     <Card>
-      <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f0fdf4', borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f0fdf4', borderBottom: '1px solid #e5e7eb', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 15, fontWeight: 700, color: '#15803d' }}>Study Pulse Pro</span>
             <Badge label="Active" color="green" />
           </div>
@@ -406,10 +409,10 @@ const SectionHelp = () => {
           <div key={i} style={{ borderBottom: i < faqs.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
             <div onClick={() => setOpen(open === i ? null : i)} style={{
               padding: '13px 20px', cursor: 'pointer',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10
             }}>
               <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{q}</span>
-              <FaChevronDown style={{ fontSize: 12, color: '#9ca3af', transform: open === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+              <FaChevronDown style={{ fontSize: 12, color: '#9ca3af', flexShrink: 0, transform: open === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </div>
             {open === i && (
               <div style={{ padding: '0 20px 14px', fontSize: 13, color: '#6b7280', lineHeight: 1.6 }}>{a}</div>
@@ -496,82 +499,177 @@ const sectionMap = {
 
 const Settings = () => {
   const [active, setActive] = useState('account');
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const activeLabel = navItems.find(i => i && i.id === active)?.label || 'Settings';
+
+  const handleSelect = (id) => {
+    setActive(id);
+    setMenuOpen(false);
+  };
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f4f6' }}>
-      {/* Sidebar — matches your green theme */}
-      <div style={{
-        width: 240, minWidth: 240,
-        background: 'linear-gradient(180deg, #24013d 0%, #4e0385 100%)',
-        display: 'flex', flexDirection: 'column',
-        position: 'sticky', top: 0, height: '100vh', overflowY: 'auto'
-      }}>
-        {/* Logo */}
-        <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>Study Pulse</div>
-          <div style={{ fontSize: 11, color: '#86efac', marginTop: 2 }}>Settings</div>
-        </div>
+    <div style={{ minHeight: '100vh', background: '#f3f4f6' }}>
+      {/* Responsive styles — layout only, no color/design changes */}
+      <style>{`
+        .settings-shell { display: flex; min-height: 100vh; }
+        .settings-sidebar {
+          width: 240px; min-width: 240px;
+          position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        }
+        .settings-mobile-header { display: none; }
+        .settings-overlay { display: none; }
+        .settings-main { padding: 32px 36px; max-width: 800px; flex: 1; overflow-y: auto; box-sizing: border-box; }
+        .profile-grid { grid-template-columns: 1fr 1fr; }
+        .theme-grid { grid-template-columns: repeat(3,1fr); }
 
-        {/* Back to dashboard */}
-        <div
-          onClick={() => navigate('/Dashboard')}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 10,
-            padding: '10px 16px', margin: '10px 10px 0',
-            borderRadius: 8, cursor: 'pointer',
-            background: 'rgba(255,255,255,0.08)', color: '#bbf7d0',
-            fontSize: 13, fontWeight: 600, transition: 'background 0.15s'
-          }}
-        >
-          <FaThLarge style={{ fontSize: 13 }} />
-          Dashboard
-        </div>
+        @media (max-width: 860px) {
+          .settings-main { max-width: 100%; }
+        }
 
-        <div style={{ padding: '10px 0', flex: 1 }}>
-          {navItems.map((item, i) => {
-            if (!item) return <div key={i} style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '6px 16px' }} />;
-            const isActive = active === item.id;
-            return (
-              <div
-                key={item.id}
-                onClick={() => setActive(item.id)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '10px 16px', margin: '1px 10px',
-                  borderRadius: 8, cursor: 'pointer',
-                  background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
-                  borderLeft: isActive ? '3px solid #4ade80' : '3px solid transparent',
-                  color: item.danger ? '#fca5a5' : isActive ? '#fff' : '#bbf7d0',
-                  fontSize: 13, fontWeight: isActive ? 600 : 400,
-                  transition: 'all 0.15s'
-                }}
-              >
-                <span style={{ fontSize: 14, flexShrink: 0 }}>{item.icon}</span>
-                {item.label}
-              </div>
-            );
-          })}
-        </div>
+        @media (max-width: 768px) {
+          .settings-shell { display: block; }
+          .settings-mobile-header {
+            display: flex; align-items: center; justify-content: space-between;
+            top: 0; z-index: 900;
+            padding: 14px 16px;
+          }
+          .settings-sidebar {
+            position: fixed; top: 0; left: 0; z-index: 1000;
+            width: 260px; min-width: 260px; height: 100vh;
+            transform: translateX(-100%);
+            transition: transform 0.25s ease;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.25);
+          }
+          .settings-sidebar.open { transform: translateX(0); }
+          .settings-overlay {
+            display: block; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.4); z-index: 999;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+          }
+          .settings-overlay.open { opacity: 1; pointer-events: auto; }
+          .settings-main { padding: 20px 16px; max-width: 100%; }
+          .profile-grid { grid-template-columns: 1fr; }
+        }
 
-        {/* User chip at bottom */}
-        <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '50%',
-            background: '#4ade80', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#14532d', flexShrink: 0
-          }}>UA</div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#fff' }}>Uzair Ansari</div>
-            <div style={{ fontSize: 11, color: '#86efac' }}>Pro member</div>
+        @media (max-width: 420px) {
+          .theme-grid { gap: 6px; }
+        }
+      `}</style>
+
+      <div className="settings-shell">
+        {/* Mobile top bar */}
+        {/* Mobile top bar */}
+        <div className="settings-mobile-header">
+          <div style={{ fontSize: 20, fontWeight: 800, color: '#000000', fontFamily: 'serif', display: 'flex', gap: 12, alignItems: 'center' }}>
+            <img src={book} alt="" className='h-12 w-12'/>
+            Study Pulse</div>
+          <div
+            onClick={() => setMenuOpen(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              color: '#000000', cursor: 'pointer'
+            }}
+          >
+
+            <FaBars style={{ fontSize: 16 }} />
           </div>
         </div>
+
+        {/* Overlay backdrop for mobile drawer */}
+        <div
+          className={`settings-overlay${menuOpen ? ' open' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        />
+
+        {/* Sidebar — matches your green/purple theme */}
+        <div className={`settings-sidebar${menuOpen ? ' open' : ''}`} style={{
+          background: 'linear-gradient(180deg, #24013d 0%, #4e0385 100%)',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Logo */}
+          <div style={{
+            padding: '24px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+          }}>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>Study Pulse</div>
+              <div style={{ fontSize: 11, color: '#86efac', marginTop: 2 }}>Settings</div>
+            </div>
+            <FaTimes
+              className="settings-close-btn"
+              onClick={() => setMenuOpen(false)}
+              style={{ display: 'none', color: '#bbf7d0', fontSize: 16, cursor: 'pointer' }}
+            />
+          </div>
+
+          {/* Back to dashboard */}
+          <div
+            onClick={() => navigate('/Dashboard')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 16px', margin: '10px 10px 0',
+              borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(255,255,255,0.08)', color: '#bbf7d0',
+              fontSize: 13, fontWeight: 600, transition: 'background 0.15s'
+            }}
+          >
+            <FaThLarge style={{ fontSize: 13 }} />
+            Dashboard
+          </div>
+
+          <div style={{ padding: '10px 0', flex: 1 }}>
+            {navItems.map((item, i) => {
+              if (!item) return <div key={i} style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '6px 16px' }} />;
+              const isActive = active === item.id;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => handleSelect(item.id)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '10px 16px', margin: '1px 10px',
+                    borderRadius: 8, cursor: 'pointer',
+                    background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                    borderLeft: isActive ? '3px solid #4ade80' : '3px solid transparent',
+                    color: item.danger ? '#fca5a5' : isActive ? '#fff' : '#bbf7d0',
+                    fontSize: 13, fontWeight: isActive ? 600 : 400,
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <span style={{ fontSize: 14, flexShrink: 0 }}>{item.icon}</span>
+                  {item.label}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* User chip at bottom */}
+          <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: '#4ade80', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#14532d', flexShrink: 0
+            }}>UA</div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#fff' }}>Uzair Ansari</div>
+              <div style={{ fontSize: 11, color: '#86efac' }}>Pro member</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="settings-main">
+          {sectionMap[active]}
+        </div>
       </div>
 
-      {/* Main content */}
-      <div style={{ flex: 1, padding: '32px 36px', overflowY: 'auto', maxWidth: 800 }}>
-        {sectionMap[active]}
-      </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .settings-close-btn { display: block !important; }
+        }
+      `}</style>
     </div>
   );
 };
