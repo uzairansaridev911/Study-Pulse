@@ -573,7 +573,7 @@ const Settings = () => {
             }}
           >
 
-            <FaBars style={{ fontSize: 16 }} />
+            <FaBars style={{ fontSize: 19 }} />
           </div>
         </div>
 
